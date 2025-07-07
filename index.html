@@ -1,109 +1,259 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AA OBFUSCATOR ROBLOX</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-  <style>
-    body {
-      background-color: #f4f4f4;
-      color: #333;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0;
-    }
-    header {
-      background-color: #fff;
-      padding: 20px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 1.5em;
-      border-bottom: 1px solid #ccc;
-      color: #111;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 30px;
-    }
-    textarea {
-      width: 100%;
-      height: 200px;
-      background-color: #1e1e1e;
-      color: #dcdcdc;
-      border: none;
-      border-radius: 6px;
-      padding: 15px;
-      font-family: monospace;
-      font-size: 14px;
-      resize: vertical;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 15px;
-      margin-right: 10px;
-      padding: 10px 25px;
-      font-size: 14px;
-      border: none;
-      border-radius: 5px;
-      background-color: #0078d4;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s;
-    }
-    button:hover {
-      background-color: #005fa3;
-    }
-    pre {
-      margin-top: 25px;
-      background-color: #1e1e1e;
-      border-radius: 6px;
-      padding: 20px;
-      font-size: 13px;
-      overflow-x: auto;
-      color: #dcdcdc;
-    }
-    h3 {
-      color: #111;
-      margin-top: 40px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Roblox Obfuscator</title>
+<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/0/04/Roblox_Logo_2022.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+<style>
+  /* Root colors */
+  :root {
+    --bg-light: #f5f7fa;
+    --text-light: #111111;
+    --bg-dark: #1e1e1e;
+    --text-dark: #dcdcdc;
+    --primary: #0078d4;
+    --primary-dark: #005fa3;
+    --radius: 8px;
+  }
+
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    overflow-y: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+  body.noscroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+  }
+
+  header {
+    padding: 20px 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8em;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background-color: var(--bg-light);
+    color: var(--text-light);
+  }
+  body.dark header {
+    background-color: #111;
+    border-bottom-color: #333;
+    color: var(--text-dark);
+  }
+
+  .container {
+    flex: 1 1 auto;
+    max-width: 960px;
+    margin: 30px auto 0;
+    padding: 0 20px 80px; /* bottom padding for footer space */
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+    height: 220px;
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    border: none;
+    border-radius: var(--radius);
+    padding: 15px;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    resize: vertical;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body:not(.dark) textarea {
+    background-color: #f0f0f0;
+    color: #222;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+  }
+
+  button {
+    margin-top: 15px;
+    margin-right: 10px;
+    padding: 10px 22px;
+    font-size: 15px;
+    border: none;
+    border-radius: var(--radius);
+    background-color: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out;
+    user-select: none;
+  }
+  button:hover {
+    background-color: var(--primary-dark);
+  }
+
+  pre {
+    margin-top: 30px;
+    background-color: var(--bg-dark);
+    border-radius: var(--radius);
+    padding: 20px;
+    font-size: 14px;
+    overflow-x: auto;
+    color: var(--text-dark);
+    line-height: 1.5;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body:not(.dark) pre {
+    background-color: #eaeaea;
+    color: #111;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+  }
+
+  h3 {
+    margin-top: 40px;
+    font-weight: 600;
+  }
+
+  /* Footer fixed to bottom */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: var(--bg-light);
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9em;
+    user-select: none;
+    z-index: 999;
+  }
+  body.dark footer {
+    background-color: #111;
+    border-top-color: #333;
+    color: #999;
+  }
+
+  /* Toggle switch */
+  .toggle-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    user-select: none;
+  }
+  .toggle-switch input[type="checkbox"] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+  }
+  .toggle-switch label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 52px;
+    height: 28px;
+    background: #c6c6c6;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .toggle-switch label:before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-switch input:checked + label {
+    background: var(--primary);
+  }
+  .toggle-switch input:checked + label:before {
+    left: calc(100% - 4px - 20px);
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: #fff;
+  }
+</style>
 </head>
 <body>
-  <header>ROBLOX AA OBFUSCATOR</header>
-  <div class="container">
-    <h3>📥 PASTE YOUR CODE:</h3>
-    <textarea id="inputCode" placeholder="local example = 1"></textarea>
-    <br />
-    <button onclick="obfuscate()">OBFUSCATE</button>
-    <button onclick="copyOutput()">COPY RESULT</button>
+<header>Roblox Obfuscator</header>
 
-    <h3>📦 CODE AFTER OBFUSCATION:</h3>
-    <pre><code id="outputCode" class="lua">-- OBFUSCATED CODE WILL BE HERE</code></pre>
-  </div>
+<div class="container">
+  <h3>Paste Lua code below:</h3>
+  <textarea id="inputCode" placeholder="local example = 1"></textarea>
+  <br />
+  <button id="obfuscateBtn">Obfuscate</button>
+  <button id="copyBtn">Copy Result</button>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script>
-    hljs.highlightAll();
+  <h3>Obfuscated Output:</h3>
+  <pre><code id="outputCode" class="lua">-- Obfuscated code will appear here</code></pre>
+</div>
 
-    // Prosty XOR dla stringów
-    function xorString(str, key) {
-      let res = "";
-      for (let i = 0; i < str.length; i++) {
-        res += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-      }
-      return res;
+<footer>
+  © AssetVault® 2025. All rights reserved.
+</footer>
+
+<div class="toggle-switch">
+  <input type="checkbox" id="themeToggle" />
+  <label for="themeToggle">Toggle Dark/Light</label>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+
+  // XOR helper for obfuscation
+  function xorString(str, key) {
+    let res = "";
+    for (let i = 0; i < str.length; i++) {
+      res += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return res;
+  }
+  function toByteArray(str) {
+    const arr = [];
+    for (let i = 0; i < str.length; i++) {
+      arr.push(str.charCodeAt(i));
+    }
+    return arr;
+  }
+
+  // Simple obfuscation logic (demo)
+  function obfuscateLua(input) {
+    const xorKey = "K3y!";
+    const parts = [];
+    // Split into strings and others
+    const regex = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|--.*?$|--\[\[[\s\S]*?\]\]|[^"'\-]+)/gm;
+    let match;
+    while ((match = regex.exec(input)) !== null) {
+      parts.push(match[0]);
     }
 
-    function toByteArray(str) {
-      const arr = [];
-      for (let i = 0; i < str.length; i++) {
-        arr.push(str.charCodeAt(i));
-      }
-      return arr;
-    }
-
-    // Lista słów kluczowych i nazw stringów, których NIE obfuskować
+    // Obfuscate strings except whitelisted
     const whitelistStrings = new Set([
       "DataStoreService",
       "PlayerInventory",
@@ -130,123 +280,77 @@
       "ipairs"
     ]);
 
-    function obfuscate() {
-      const input = document.getElementById("inputCode").value;
-      const output = document.getElementById("outputCode");
-
-      if (!input.trim()) {
-        output.textContent = "-- Wklej kod, aby rozpocząć obfuskację";
-        hljs.highlightElement(output);
-        return;
-      }
-
-      // Znak rozdzielający do rekonstrukcji stringów w Lua (komentarz w 1 linii)
-      const xorKey = "K3y!";
-
-      // 1. Podziel kod na fragmenty (stringi i nie-stringi)
-      const parts = [];
-      const regex = /(\"(?:\\.|[^\"\\])*\"|\'(?:\\.|[^\'\\])*\'|--.*?$|--\[\[[\s\S]*?\]\]|[^\"\'\-]+)/gm;
-      let match;
-      while ((match = regex.exec(input)) !== null) {
-        parts.push(match[0]);
-      }
-
-      // 2. Obfuskacja zmiennych lokalnych (jak wcześniej)
-      const reserved = new Set([
-        "game", "workspace", "script", "pcall", "warn", "print", "math", "table", "string",
-        "Instance", "Enum", "Vector3", "Color3", "CFrame", "pairs", "ipairs", "wait",
-        "spawn", "require", "getfenv", "setfenv", "GetService", "FindFirstChild",
-        "new", "PlayerAdded", "Touched", "GetPlayers"
-      ]);
-
-      const identifierRegex = /\blocal\s+([a-zA-Z_][a-zA-Z0-9_]*)/g;
-      const varMap = new Map();
-
-      // Zbierz zmienne lokalne
-      for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        if (part.startsWith('"') || part.startsWith("'") || part.startsWith("--")) continue;
-
-        let m;
-        while ((m = identifierRegex.exec(part)) !== null) {
-          const name = m[1];
-          if (!reserved.has(name) && !varMap.has(name)) {
-            varMap.set(name, "_v" + Math.random().toString(36).substr(2, 6));
-          }
+    let needDecodeFunc = false;
+    for (let i = 0; i < parts.length; i++) {
+      let part = parts[i];
+      if (part.startsWith('"') || part.startsWith("'")) {
+        const raw = part.slice(1, -1);
+        if (!whitelistStrings.has(raw)) {
+          const xored = xorString(raw, xorKey);
+          const bytes = toByteArray(xored);
+          parts[i] = `decodeXOR({${bytes.join(",")}}, "${xorKey}")`;
+          needDecodeFunc = true;
         }
       }
+    }
 
-      // 3. Obfuskacja stringów — tylko tych spoza whitelisty
-      function obfuscateStringLiteral(str) {
-        // usuń cudzysłowy na brzegach
-        const raw = str.slice(1, -1);
+    // Reassemble code
+    let obfuscated = parts.join("");
 
-        if (whitelistStrings.has(raw)) {
-          // Nie ruszaj
-          return str;
-        }
-
-        // XOR
-        const xored = xorString(raw, xorKey);
-        const bytes = toByteArray(xored);
-
-        // Stwórz Lua tablicę bajtów
-        const luaArray = "{" + bytes.join(",") + "}";
-
-        // Lua funkcja dekodująca (załączymy tylko raz w wyniku)
-        // Zwróć kod wywołujący dekodowanie
-
-        return `decodeXOR(${luaArray}, "${xorKey}")`;
-      }
-
-      // Dodamy flagę, czy trzeba dołączyć funkcję decodeXOR
-      let needDecodeFunc = false;
-
-      for (let i = 0; i < parts.length; i++) {
-        let part = parts[i];
-        if (part.startsWith('"') || part.startsWith("'")) {
-          const obf = obfuscateStringLiteral(part);
-          if (obf !== part) needDecodeFunc = true;
-          parts[i] = obf;
-        }
-      }
-
-      // 4. Podmiana zmiennych lokalnych w kodzie
-      for (let i = 0; i < parts.length; i++) {
-        let part = parts[i];
-        if (part.startsWith('"') || part.startsWith("'") || part.startsWith("--")) continue;
-
-        for (const [orig, obf] of varMap.entries()) {
-          const re = new RegExp("\\b" + orig + "\\b", "g");
-          part = part.replace(re, obf);
-        }
-        parts[i] = part;
-      }
-
-      // 5. Połącz kod
-      let obfuscatedCode = parts.join("");
-
-      // 6. Dołącz funkcję decodeXOR jeśli trzeba
-      if (needDecodeFunc) {
-        obfuscatedCode = `
-local function decodeXOR(bytes, key)
+    // Add decodeXOR function if needed
+    if (needDecodeFunc) {
+      obfuscated = `local function decodeXOR(bytes, key)
   local res = ""
   for i = 1, #bytes do
     res = res .. string.char(bit32.bxor(bytes[i], string.byte(key, ((i - 1) % #key) + 1)))
   end
   return res
-end
-` + obfuscatedCode;
-      }
+end\n` + obfuscated;
+    }
 
-      output.textContent = obfuscatedCode;
+    return obfuscated;
+  }
+
+  const input = document.getElementById("inputCode");
+  const output = document.getElementById("outputCode");
+  const obfuscateBtn = document.getElementById("obfuscateBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const themeToggle = document.getElementById("themeToggle");
+
+  obfuscateBtn.addEventListener("click", () => {
+    if (!input.value.trim()) {
+      output.textContent = "-- Paste your Lua code to obfuscate";
       hljs.highlightElement(output);
+      return;
     }
+    document.body.classList.add("noscroll");
+    setTimeout(() => {
+      const obf = obfuscateLua(input.value);
+      output.textContent = obf;
+      hljs.highlightElement(output);
+      document.body.classList.remove("noscroll");
+    }, 150);
+  });
 
-    function copyOutput() {
-      const text = document.getElementById("outputCode").textContent;
-      navigator.clipboard.writeText(text).then(() => alert("✅ Skopiowano obfuskowany kod!"));
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(output.textContent).then(() => {
+      alert("Obfuscated code copied!");
+    });
+  });
+
+  themeToggle.addEventListener("change", () => {
+    if (themeToggle.checked) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
     }
-  </script>
+  });
+
+  // Initialize theme based on prefers-color-scheme
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+    themeToggle.checked = true;
+    document.body.classList.add("dark");
+  }
+</script>
 </body>
 </html>
