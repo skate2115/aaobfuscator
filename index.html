@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Roblox Obfuscator + String XOR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+    }
+    header {
+      background-color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.5em;
+      border-bottom: 1px solid #ccc;
+      color: #111;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      background-color: #1e1e1e;
+      color: #dcdcdc;
+      border: none;
+      border-radius: 6px;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      margin-right: 10px;
+      padding: 10px 25px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      background-color: #0078d4;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    pre {
+      margin-top: 25px;
+      background-color: #1e1e1e;
+      border-radius: 6px;
+      padding: 20px;
+      font-size: 13px;
+      overflow-x: auto;
+      color: #dcdcdc;
+    }
+    h3 {
+      color: #111;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>🛡️ Roblox Obfuscator + String XOR (bezpieczna obfuskacja)</header>
+  <div class="container">
+    <h3>📥 Wklej kod Lua:</h3>
+    <textarea id="inputCode" placeholder="local example = 1"></textarea>
+    <br />
+    <button onclick="obfuscate()">🔐 Obfuskacja</button>
+    <button onclick="copyOutput()">📋 Kopiuj wynik</button>
+
+    <h3>📦 Obfuskowany kod:</h3>
+    <pre><code id="outputCode" class="lua">-- Obfuskowany kod pojawi się tutaj</code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+
+    // Prosty XOR dla stringów
+    function xorString(str, key) {
+      let res = "";
+      for (let i = 0; i < str.length; i++) {
+        res += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return res;
+    }
+
+    function toByteArray(str) {
+      const arr = [];
+      for (let i = 0; i < str.length; i++) {
+        arr.push(str.charCodeAt(i));
+      }
+      return arr;
+    }
+
+    // Lista słów kluczowych i nazw stringów, których NIE obfuskować
+    const whitelistStrings = new Set([
+      "DataStoreService",
+      "PlayerInventory",
+      "GetService",
+      "game",
+      "workspace",
+      "Players",
+      "UserId",
+      "SetAsync",
+      "GetAsync",
+      "pcall",
+      "local",
+      "function",
+      "return",
+      "print",
+      "warn",
+      "require",
+      "Vector3",
+      "CFrame",
+      "Color3",
+      "Instance",
+      "Enum",
+      "pairs",
+      "ipairs"
+    ]);
+
+    function obfuscate() {
+      const input = document.getElementById("inputCode").value;
+      const output = document.getElementById("outputCode");
+
+      if (!input.trim()) {
+        output.textContent = "-- Wklej kod, aby rozpocząć obfuskację";
+        hljs.highlightElement(output);
+        return;
+      }
+
+      // Znak rozdzielający do rekonstrukcji stringów w Lua (komentarz w 1 linii)
+      const xorKey = "K3y!";
+
+      // 1. Podziel kod na fragmenty (stringi i nie-stringi)
+      const parts = [];
+      const regex = /(\"(?:\\.|[^\"\\])*\"|\'(?:\\.|[^\'\\])*\'|--.*?$|--\[\[[\s\S]*?\]\]|[^\"\'\-]+)/gm;
+      let match;
+      while ((match = regex.exec(input)) !== null) {
+        parts.push(match[0]);
+      }
+
+      // 2. Obfuskacja zmiennych lokalnych (jak wcześniej)
+      const reserved = new Set([
+        "game", "workspace", "script", "pcall", "warn", "print", "math", "table", "string",
+        "Instance", "Enum", "Vector3", "Color3", "CFrame", "pairs", "ipairs", "wait",
+        "spawn", "require", "getfenv", "setfenv", "GetService", "FindFirstChild",
+        "new", "PlayerAdded", "Touched", "GetPlayers"
+      ]);
+
+      const identifierRegex = /\blocal\s+([a-zA-Z_][a-zA-Z0-9_]*)/g;
+      const varMap = new Map();
+
+      // Zbierz zmienne lokalne
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (part.startsWith('"') || part.startsWith("'") || part.startsWith("--")) continue;
+
+        let m;
+        while ((m = identifierRegex.exec(part)) !== null) {
+          const name = m[1];
+          if (!reserved.has(name) && !varMap.has(name)) {
+            varMap.set(name, "_v" + Math.random().toString(36).substr(2, 6));
+          }
+        }
+      }
+
+      // 3. Obfuskacja stringów — tylko tych spoza whitelisty
+      function obfuscateStringLiteral(str) {
+        // usuń cudzysłowy na brzegach
+        const raw = str.slice(1, -1);
+
+        if (whitelistStrings.has(raw)) {
+          // Nie ruszaj
+          return str;
+        }
+
+        // XOR
+        const xored = xorString(raw, xorKey);
+        const bytes = toByteArray(xored);
+
+        // Stwórz Lua tablicę bajtów
+        const luaArray = "{" + bytes.join(",") + "}";
+
+        // Lua funkcja dekodująca (załączymy tylko raz w wyniku)
+        // Zwróć kod wywołujący dekodowanie
+
+        return `decodeXOR(${luaArray}, "${xorKey}")`;
+      }
+
+      // Dodamy flagę, czy trzeba dołączyć funkcję decodeXOR
+      let needDecodeFunc = false;
+
+      for (let i = 0; i < parts.length; i++) {
+        let part = parts[i];
+        if (part.startsWith('"') || part.startsWith("'")) {
+          const obf = obfuscateStringLiteral(part);
+          if (obf !== part) needDecodeFunc = true;
+          parts[i] = obf;
+        }
+      }
+
+      // 4. Podmiana zmiennych lokalnych w kodzie
+      for (let i = 0; i < parts.length; i++) {
+        let part = parts[i];
+        if (part.startsWith('"') || part.startsWith("'") || part.startsWith("--")) continue;
+
+        for (const [orig, obf] of varMap.entries()) {
+          const re = new RegExp("\\b" + orig + "\\b", "g");
+          part = part.replace(re, obf);
+        }
+        parts[i] = part;
+      }
+
+      // 5. Połącz kod
+      let obfuscatedCode = parts.join("");
+
+      // 6. Dołącz funkcję decodeXOR jeśli trzeba
+      if (needDecodeFunc) {
+        obfuscatedCode = `
+local function decodeXOR(bytes, key)
+  local res = ""
+  for i = 1, #bytes do
+    res = res .. string.char(bit32.bxor(bytes[i], string.byte(key, ((i - 1) % #key) + 1)))
+  end
+  return res
+end
+` + obfuscatedCode;
+      }
+
+      output.textContent = obfuscatedCode;
+      hljs.highlightElement(output);
+    }
+
+    function copyOutput() {
+      const text = document.getElementById("outputCode").textContent;
+      navigator.clipboard.writeText(text).then(() => alert("✅ Skopiowano obfuskowany kod!"));
+    }
+  </script>
+</body>
+</html>
