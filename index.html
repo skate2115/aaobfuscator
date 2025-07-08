@@ -351,6 +351,31 @@ end\n` + obfuscated;
     themeToggle.checked = true;
     document.body.classList.add("dark");
   }
+
+  // 1. Blokada prawego przycisku
+  window.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+
+  // 2. Blokada klawiatury
+  window.addEventListener('keydown', function (e) {
+    if (
+      e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'U' || e.key === 'S') || // Ctrl+U/S
+      e.key === 'F12' || // F12
+      (e.ctrlKey && e.shiftKey && e.key === 'I') // Ctrl+Shift+I
+    ) {
+      e.preventDefault();
+      console.log("Action blocked for security reasons.");
+    }
+  });
+
+  // 3. Ostrzeżenie w konsoli
+  setTimeout(() => {
+    if (window.console) {
+      console.log('%c⚠️ STOP!', 'font-size: 30px; color: red; font-weight: bold;');
+      console.log('%cThis area is for developers only. Do not paste code here unless you know what you are doing.', 'font-size: 16px;');
+    }
+  }, 1000);
 </script>
 </body>
 </html>
