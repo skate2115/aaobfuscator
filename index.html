@@ -167,8 +167,8 @@
     const loggedIn = localStorage.getItem("auth_status") === "logged_in";
 
     menu.innerHTML = loggedIn
-      ? `<a href="/obfuscator/">Obfuscator</a><a href="#">Support</a><a href="#" onclick="logout()">Log out</a>`
-      : `<a href="/login/">Sign In</a><a href="/register/">Sign Up</a><a href="#">Support</a>`;
+      ? `<a href="/aaobfuscator/obfuscator/">Obfuscator</a><a href="#">Support</a><a href="#" onclick="logout()">Log out</a>`
+      : `<a href="/aaobfuscator/login/">Sign In</a><a href="/aaobfuscator/register/">Sign Up</a><a href="#">Support</a>`;
 
     function logout() {
       localStorage.removeItem("auth_status");
