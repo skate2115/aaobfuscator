@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AssetVault™ Obfuscator - Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.05);
+      --blur: blur(12px);
+      --radius: 14px;
+      --color: #eaeaea;
+      --primary: #0078d4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at center, #0f1117 0%, #0a0c12 100%);
+      color: var(--color);
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .navbar {
+      height: 64px;
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: var(--blur);
+      background: var(--glass);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 350px;
+      width: 350px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: 32px;
+    }
+
+    .nav-actions a {
+      padding: 5px 14px;
+      font-size: 13px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      text-decoration: none;
+      color: #eaeaea;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      box-shadow:
+        inset 0 0 0.5px rgba(255,255,255,0.2),
+        0 1px 4px rgba(0,0,0,0.06);
+    } 
+
+    .nav-actions a:hover {
+      background: rgba(255,255,255,0.12);
+      box-shadow:
+       inset 0 0 1px rgba(255,255,255,0.3),
+       0 2px 8px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 60px 40px;
+    }
+
+    .box {
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      padding: 32px 28px;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .box h3 {
+      font-size: 1.4em;
+      font-weight: 400;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    input {
+      width: 100%;
+      margin-bottom: 14px;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 14px;
+      background: rgba(255,255,255,0.04);
+      color: #eaeaea;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #eaeaea;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow:
+        inset 0 0 0.4px rgba(255,255,255,0.3),
+        inset 0 0 6px rgba(255,255,255,0.05),
+        0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 0 1px rgba(255,255,255,0.5),
+        inset 0 0 8px rgba(255,255,255,0.08),
+        0 6px 16px rgba(0,0,0,0.09);
+    }
+
+    .redirect {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.95em;
+    }
+
+    .redirect a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer {
+      padding: 16px 32px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #888;
+      backdrop-filter: var(--blur);
+      background: var(--glass);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Alpha's Obfuscator" class="logo-img" />
+    </div>
+    <div class="nav-actions">
+      <a href="/">Home</a>
+      <a href="/register/">Sing Up</a>
+      <a href="#">Support</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="box">
+      <h3>Sign In</h3>
+      <input type="text" id="loginLogin" placeholder="Username" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button id="loginBtn">Sign In</button>
+      <div class="redirect">Don't have account? <a href="/register/">Sign Up</a></div>
+    </div>
+  </main>
+
+  <footer>© Powered by AssetVault™ 2025 ©</footer>
+
+  <script>
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const login = document.getElementById("loginLogin").value;
+      const password = document.getElementById("loginPassword").value;
+      const saved = localStorage.getItem(`user_${login}`);
+
+      if (!saved) return alert("Brak użytkownika!");
+
+      const user = JSON.parse(saved);
+      if (user.password === password) {
+        localStorage.setItem("auth_status", "logged_in");
+        window.location.href = "/obfuscator/";
+      } else {
+        alert("Nieprawidłowe hasło.");
+      }
+    });
+  </script>
+</body>
+</html>

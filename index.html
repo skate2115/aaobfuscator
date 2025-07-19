@@ -1,381 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Roblox Obfuscator</title>
-<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/0/04/Roblox_Logo_2022.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-<style>
-  /* Root colors */
-  :root {
-    --bg-light: #f5f7fa;
-    --text-light: #111111;
-    --bg-dark: #1e1e1e;
-    --text-dark: #dcdcdc;
-    --primary: #0078d4;
-    --primary-dark: #005fa3;
-    --radius: 8px;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.70" />
+  <title>AssetVault™ Obfuscator</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta name="author" content="AssetVault">
+  <meta name="keywords" content="assetvault,assetvault obfuscator,assetvaultobfuscator,obfuscator,polski,serwer,roblox">
+  <meta name="description" content="An website for obfuscating roblox scripts.">
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.05);
+      --blur: blur(12px);
+      --color: #eaeaea;
+      --primary: #0078d4;
+    }
 
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-light);
-    overflow-y: auto;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  body.dark {
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
-  }
-  body.noscroll {
-    overflow: hidden !important;
-    height: 100vh !important;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  header {
-    padding: 20px 0;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.8em;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    background-color: var(--bg-light);
-    color: var(--text-light);
-  }
-  body.dark header {
-    background-color: #111;
-    border-bottom-color: #333;
-    color: var(--text-dark);
-  }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at center, #0f1117 0%, #0a0c12 100%);
+      color: var(--color);
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .container {
-    flex: 1 1 auto;
-    max-width: 960px;
-    margin: 30px auto 0;
-    padding: 0 20px 80px; /* bottom padding for footer space */
-    width: 100%;
-  }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4));
+      pointer-events: none;
+      z-index: -1;
+    }
 
-  textarea {
-    width: 100%;
-    height: 220px;
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
-    border: none;
-    border-radius: var(--radius);
-    padding: 15px;
-    font-family: 'Fira Code', monospace;
-    font-size: 14px;
-    resize: vertical;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-    transition: background-color 0.3s, color 0.3s;
-  }
-  body:not(.dark) textarea {
-    background-color: #f0f0f0;
-    color: #222;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
-  }
+.navbar {
+  height: 64px; /* ⬅️ stała wysokość */
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: var(--blur);
+  background: var(--glass);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 
-  button {
-    margin-top: 15px;
-    margin-right: 10px;
-    padding: 10px 22px;
-    font-size: 15px;
-    border: none;
-    border-radius: var(--radius);
-    background-color: var(--primary);
-    color: #fff;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s ease-in-out;
-    user-select: none;
-  }
-  button:hover {
-    background-color: var(--primary-dark);
-  }
+    .logo {
+      font-size: 1.6em;
+      font-weight: 500;
+      color: #fff;
+    }
 
-  pre {
-    margin-top: 30px;
-    background-color: var(--bg-dark);
-    border-radius: var(--radius);
-    padding: 20px;
-    font-size: 14px;
-    overflow-x: auto;
-    color: var(--text-dark);
-    line-height: 1.5;
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
-    transition: background-color 0.3s, color 0.3s;
-  }
-  body:not(.dark) pre {
-    background-color: #eaeaea;
-    color: #111;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
-  }
+.logo-img {
+  height: 350px;
+  max-width: 350px;
+  object-fit: contain;
+  display: block;
+}
 
-  h3 {
-    margin-top: 40px;
-    font-weight: 600;
-  }
+.nav-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 24px; /* bliżej logo */
+}
 
-  /* Footer fixed to bottom */
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background-color: var(--bg-light);
-    border-top: 1px solid #ddd;
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    font-size: 0.9em;
-    user-select: none;
-    z-index: 999;
-  }
-  body.dark footer {
-    background-color: #111;
-    border-top-color: #333;
-    color: #999;
-  }
+.nav-actions a {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 1px 4px rgba(0,0,0,0.1),
+    inset 0 0 0.5px rgba(255,255,255,0.2);
+}
 
-  /* Toggle switch */
-  .toggle-switch {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    user-select: none;
-  }
-  .toggle-switch input[type="checkbox"] {
-    height: 0;
-    width: 0;
-    visibility: hidden;
-  }
-  .toggle-switch label {
-    cursor: pointer;
-    text-indent: -9999px;
-    width: 52px;
-    height: 28px;
-    background: #c6c6c6;
-    display: block;
-    border-radius: 100px;
-    position: relative;
-    transition: background-color 0.3s ease-in-out;
-  }
-  .toggle-switch label:before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border-radius: 90px;
-    transition: 0.3s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
-  .toggle-switch input:checked + label {
-    background: var(--primary);
-  }
-  .toggle-switch input:checked + label:before {
-    left: calc(100% - 4px - 20px);
-  }
+.nav-actions a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.15),
+    inset 0 0 1px rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
 
-  ::selection {
-    background: var(--primary);
-    color: #fff;
-  }
-</style>
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 60px 60px 40px;
+    }
+
+    .hero {
+      max-width: 660px;
+    }
+
+    .hero h1 {
+      font-size: 2.4em;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1.1em;
+      line-height: 1.7;
+      color: #ccc;
+    }
+
+    .accent-line {
+      margin-top: 28px;
+      width: 80px;
+      height: 3px;
+      background: #b86cfb;
+      border-radius: 3px;
+    }
+
+    footer {
+      padding: 16px 32px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #888;
+      backdrop-filter: var(--blur);
+      background: var(--glass);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
 </head>
 <body>
-<header>Roblox Obfuscator</header>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Alpha's Obfuscator" class="logo-img" />
+    </div>
+    <div class="nav-actions" id="menu"></div>
+  </nav>
 
-<div class="container">
-  <h3>Paste Lua code below:</h3>
-  <textarea id="inputCode" placeholder="local example = 1"></textarea>
-  <br />
-  <button id="obfuscateBtn">Obfuscate</button>
-  <button id="copyBtn">Copy Result</button>
+  <main>
+    <section class="hero">
+      <h1>Obfuscate Your Lua Code</h1>
+      <p>
+        Alpha’s Obfuscator is a secure, browser-based tool for transforming Lua scripts into unreadable formats.<br><br>
+        Protect your logic, hide sensitive code, and deploy with confidence — no installation required. 
+        Whether you're working on private projects or public releases, Alpha’s Obfuscator ensures your Lua code stays encrypted and safe from prying eyes.
+      </p>
+      <div class="accent-line"></div>
+    </section>
+  </main>
 
-  <h3>Obfuscated Output:</h3>
-  <pre><code id="outputCode" class="lua">-- Obfuscated code will appear here</code></pre>
-</div>
+  <footer>© Powered by AssetVault™ 2025 ©</footer>
 
-<footer>
-  © AssetVault® 2025. All rights reserved.
-</footer>
+  <script>
+    const menu = document.getElementById("menu");
+    const loggedIn = localStorage.getItem("auth_status") === "logged_in";
 
-<div class="toggle-switch">
-  <input type="checkbox" id="themeToggle" />
-  <label for="themeToggle">Toggle Dark/Light</label>
-</div>
+    menu.innerHTML = loggedIn
+      ? `<a href="/obfuscator/">Obfuscator</a><a href="#">Support</a><a href="#" onclick="logout()">Log out</a>`
+      : `<a href="/login/">Sign In</a><a href="/register/">Sign Up</a><a href="#">Support</a>`;
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
-
-  // XOR helper for obfuscation
-  function xorString(str, key) {
-    let res = "";
-    for (let i = 0; i < str.length; i++) {
-      res += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    function logout() {
+      localStorage.removeItem("auth_status");
+      localStorage.removeItem("auth_return");
+      window.location.href = "/";
     }
-    return res;
-  }
-  function toByteArray(str) {
-    const arr = [];
-    for (let i = 0; i < str.length; i++) {
-      arr.push(str.charCodeAt(i));
-    }
-    return arr;
-  }
-
-  // Simple obfuscation logic (demo)
-  function obfuscateLua(input) {
-    const xorKey = "K3y!";
-    const parts = [];
-    // Split into strings and others
-    const regex = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|--.*?$|--\[\[[\s\S]*?\]\]|[^"'\-]+)/gm;
-    let match;
-    while ((match = regex.exec(input)) !== null) {
-      parts.push(match[0]);
-    }
-
-    // Obfuscate strings except whitelisted
-    const whitelistStrings = new Set([
-      "DataStoreService",
-      "PlayerInventory",
-      "GetService",
-      "game",
-      "workspace",
-      "Players",
-      "UserId",
-      "SetAsync",
-      "GetAsync",
-      "pcall",
-      "local",
-      "function",
-      "return",
-      "print",
-      "warn",
-      "require",
-      "Vector3",
-      "CFrame",
-      "Color3",
-      "Instance",
-      "Enum",
-      "pairs",
-      "ipairs"
-    ]);
-
-    let needDecodeFunc = false;
-    for (let i = 0; i < parts.length; i++) {
-      let part = parts[i];
-      if (part.startsWith('"') || part.startsWith("'")) {
-        const raw = part.slice(1, -1);
-        if (!whitelistStrings.has(raw)) {
-          const xored = xorString(raw, xorKey);
-          const bytes = toByteArray(xored);
-          parts[i] = `decodeXOR({${bytes.join(",")}}, "${xorKey}")`;
-          needDecodeFunc = true;
-        }
-      }
-    }
-
-    // Reassemble code
-    let obfuscated = parts.join("");
-
-    // Add decodeXOR function if needed
-    if (needDecodeFunc) {
-      obfuscated = `local function decodeXOR(bytes, key)
-  local res = ""
-  for i = 1, #bytes do
-    res = res .. string.char(bit32.bxor(bytes[i], string.byte(key, ((i - 1) % #key) + 1)))
-  end
-  return res
-end\n` + obfuscated;
-    }
-
-    return obfuscated;
-  }
-
-  const input = document.getElementById("inputCode");
-  const output = document.getElementById("outputCode");
-  const obfuscateBtn = document.getElementById("obfuscateBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const themeToggle = document.getElementById("themeToggle");
-
-  obfuscateBtn.addEventListener("click", () => {
-    if (!input.value.trim()) {
-      output.textContent = "-- Paste your Lua code to obfuscate";
-      hljs.highlightElement(output);
-      return;
-    }
-    document.body.classList.add("noscroll");
-    setTimeout(() => {
-      const obf = obfuscateLua(input.value);
-      output.textContent = obf;
-      hljs.highlightElement(output);
-      document.body.classList.remove("noscroll");
-    }, 150);
-  });
-
-  copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(output.textContent).then(() => {
-      alert("Obfuscated code copied!");
-    });
-  });
-
-  themeToggle.addEventListener("change", () => {
-    if (themeToggle.checked) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  });
-
-  // Initialize theme based on prefers-color-scheme
-  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-    themeToggle.checked = true;
-    document.body.classList.add("dark");
-  }
-
-  // 1. Blokada prawego przycisku
-  window.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-  });
-
-  // 2. Blokada klawiatury
-  window.addEventListener('keydown', function (e) {
-    if (
-      e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'U' || e.key === 'S') || // Ctrl+U/S
-      e.key === 'F12' || // F12
-      (e.ctrlKey && e.shiftKey && e.key === 'I') // Ctrl+Shift+I
-    ) {
-      e.preventDefault();
-      console.log("Action blocked for security reasons.");
-    }
-  });
-
-  // 3. Ostrzeżenie w konsoli
-  setTimeout(() => {
-    if (window.console) {
-      console.log('%c⚠️ STOP!', 'font-size: 30px; color: red; font-weight: bold;');
-      console.log('%cThis area is for developers only. Do not paste code here unless you know what you are doing.', 'font-size: 16px;');
-    }
-  }, 1000);
-</script>
+  </script>
 </body>
 </html>
