@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.70" />
+  <title>AssetVault™ Obfuscator</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta name="author" content="AssetVault">
+  <meta name="keywords" content="assetvault,assetvault obfuscator,assetvaultobfuscator,obfuscator,polski,serwer,roblox">
+  <meta name="description" content="An website for obfuscating roblox scripts.">
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.05);
+      --blur: blur(12px);
+      --color: #eaeaea;
+      --primary: #0078d4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at center, #0f1117 0%, #0a0c12 100%);
+      color: var(--color);
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+.navbar {
+  height: 64px; /* ⬅️ stała wysokość */
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: var(--blur);
+  background: var(--glass);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+    .logo {
+      font-size: 1.6em;
+      font-weight: 500;
+      color: #fff;
+    }
+
+.logo-img {
+  height: 350px;
+  max-width: 350px;
+  object-fit: contain;
+  display: block;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 24px; /* bliżej logo */
+}
+
+.nav-actions a {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 1px 4px rgba(0,0,0,0.1),
+    inset 0 0 0.5px rgba(255,255,255,0.2);
+}
+
+.nav-actions a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.15),
+    inset 0 0 1px rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 60px 60px 40px;
+    }
+
+    .hero {
+      max-width: 660px;
+    }
+
+    .hero h1 {
+      font-size: 2.4em;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1.1em;
+      line-height: 1.7;
+      color: #ccc;
+    }
+
+    .accent-line {
+      margin-top: 28px;
+      width: 80px;
+      height: 3px;
+      background: #b86cfb;
+      border-radius: 3px;
+    }
+
+    footer {
+      padding: 16px 32px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #888;
+      backdrop-filter: var(--blur);
+      background: var(--glass);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Alpha's Obfuscator" class="logo-img" />
+    </div>
+    <div class="nav-actions" id="menu"></div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1>Obfuscate Your Lua Code</h1>
+      <p>
+        Alpha’s Obfuscator is a secure, browser-based tool for transforming Lua scripts into unreadable formats.<br><br>
+        Protect your logic, hide sensitive code, and deploy with confidence — no installation required. 
+        Whether you're working on private projects or public releases, Alpha’s Obfuscator ensures your Lua code stays encrypted and safe from prying eyes.
+      </p>
+      <div class="accent-line"></div>
+    </section>
+  </main>
+
+  <footer>© Powered by AssetVault™ 2025 ©</footer>
+
+  <script>
+    const menu = document.getElementById("menu");
+    const loggedIn = localStorage.getItem("auth_status") === "logged_in";
+
+    menu.innerHTML = loggedIn
+      ? `<a href="/obfuscator/">Obfuscator</a><a href="#">Support</a><a href="#" onclick="logout()">Log out</a>`
+      : `<a href="/login/">Sign In</a><a href="/register/">Sign Up</a><a href="#">Support</a>`;
+
+    function logout() {
+      localStorage.removeItem("auth_status");
+      localStorage.removeItem("auth_return");
+      window.location.href = "/";
+    }
+  </script>
+</body>
+</html>
